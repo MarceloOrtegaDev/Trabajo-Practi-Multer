@@ -9,7 +9,7 @@ const userProdct = new mongoose.Schema({
         type: String,
         required: true
     },
-    products: [{
+    sales: [{
         price: {
             type: String,
             required: true,

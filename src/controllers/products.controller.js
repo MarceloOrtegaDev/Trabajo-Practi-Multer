@@ -16,7 +16,7 @@ const upload = multer({ storage: storage });
 // Middleware de Multer para manejar la subida de la imagen
 export const uploadUserImage = upload.single('file');
 
-export const createUser = async (req, res) => {
+export const postProduct = async (req, res) => {
     try {
         const { name, description, price } = req.body; // Asegúrate de que price esté incluido aquí
 
@@ -27,17 +27,17 @@ export const createUser = async (req, res) => {
 
         const imageUrl = `localhost:3000/uploads/${req.file.filename}`; // Ruta donde se guardó la imagen
 
-        const newUser = new newProducts({
+        const createProduct = new newProducts({
             name,
             description,
-            products: [{ // Agrega el objeto con price y imageUrl al arreglo products
+            sales: [{ // Agrega el objeto con price y imageUrl al arreglo products
                 price,
                 imageUrl
             }]
         });
 
-        await newUser.save(); // Guarda el nuevo producto en la base de datos
-        res.status(201).json({ msg: "Se creó el nuevo usuario", newUser });
+        await createProduct.save(); // Guarda el nuevo producto en la base de datos
+        res.status(201).json({ msg: "Se creó el nuevo usuario", createProduct });
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: "Error en el servidor" });
@@ -64,12 +64,12 @@ export const addProduct = async (req, res) => {
 
         // Si hay un nuevo precio, lo actualiza
         if (price) {
-            productToUpdate.products.push({ // Agrega un nuevo objeto con el precio y la imagen
+            productToUpdate.sales.push({ // Agrega un nuevo objeto con el precio y la imagen
                 price,
                 imageUrl
             });
         } else if (imageUrl) {
-            productToUpdate.products[0].imageUrl = imageUrl; // Actualiza la imagen del primer producto en el array
+            productToUpdate.sales[0].imageUrl = imageUrl; // Actualiza la imagen del primer producto en el array
         }
 
         await productToUpdate.save(); // Guarda los cambios en la base de datos

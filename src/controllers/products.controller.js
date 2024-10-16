@@ -1,20 +1,4 @@
-import multer from "multer";
 import { newProducts } from "../model/product.model.js";
-
-// Configuración de Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`);
-    }
-});
-
-const upload = multer({ storage: storage });
-
-// Middleware de Multer para manejar la subida de la imagen
-export const uploadUserImage = upload.single('file');
 
 export const postProduct = async (req, res) => {
     try {
@@ -22,7 +6,7 @@ export const postProduct = async (req, res) => {
 
         // Verifica si el archivo fue subido
         if (!req.file) {
-            return res.status(400).json({ msg: "Error al subir la imagen" });
+            return res.status(400).json({ msg: "Error al subir la imagen: asegurate de que sea jpg o png" });
         }
 
         const imageUrl = `localhost:3000/uploads/${req.file.filename}`; // Ruta donde se guardó la imagen
